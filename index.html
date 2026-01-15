@@ -14,8 +14,8 @@ header { padding: 16px; text-align: center; font-size: 22px; font-weight: 600; }
 .card-content { padding: 14px; }
 .price { font-weight: bold; margin: 8px 0; }
 .status { font-size: 13px; opacity: .6; margin-bottom: 10px; }
-button { width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 8px; font-size: 16px; }
-button:disabled { background: #ccc; }
+button { width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+button:disabled { background: #ccc; cursor: not-allowed; }
 </style>
 </head>
 
@@ -24,25 +24,25 @@ button:disabled { background: #ccc; }
 <div id="catalog"></div>
 
 <script>
-// Статичный каталог — без API
+// Статический каталог товаров
 const products = [
   {
     name: "Тюльпаны",
-    image: "https://drive.google.com/uc?export=view&id=1MeKVLBl8GOc-vYRHl0uirwRvO4aeSysf",
+    image: "images/tulip.jpg",
     description: "Охапка тюльпанов 50 штук",
     price: 7000,
     quantity: 50
   },
   {
     name: "Гвоздика кустовая розовая",
-    image: "https://drive.google.com/uc?export=view&id=17dNfpXWyWUi84eQNPdtdQzpKZ3_15ktU",
+    image: "images/carnation.jpg",
     description: "Охапка розовой кустовой гвоздики 20 штук",
     price: 2000,
     quantity: 20
   },
   {
     name: "Гвоздика Грин трик",
-    image: "https://drive.google.com/uc?export=view&id=1kokub4RL543Ug8QR2iD5JugxTAgIsfEd",
+    image: "images/greentrick.jpg",
     description: "Охапка гвоздики Грин трик",
     price: 2200,
     quantity: 10
@@ -51,24 +51,27 @@ const products = [
 
 const catalog = document.getElementById("catalog");
 
+// Создаём карточки товаров
 products.forEach(item => {
   const card = document.createElement("div");
   card.className = "card";
+  const disabled = item.quantity <= 0;
   card.innerHTML = `
     <img src="${item.image}" alt="${item.name}">
     <div class="card-content">
       <h3>${item.name}</h3>
       <p>${item.description}</p>
-      <div class="status">${item.quantity > 0 ? "В наличии" : "Нет в наличии"}</div>
+      <div class="status">${disabled ? "Нет в наличии" : "В наличии"}</div>
       <div class="price">${item.price} ₽</div>
-      <button onclick="order('${item.name}')">Оформить</button>
+      <button ${disabled ? 'disabled' : ''} onclick="order('${item.name}')">Оформить</button>
     </div>
   `;
   catalog.appendChild(card);
 });
 
+// Кнопка заказа
 function order(name) {
-  if (typeof Telegram !== "undefined") {
+  if (window.Telegram && Telegram.WebApp) {
     Telegram.WebApp.sendData("Заказ Flurimo: " + name);
   } else {
     alert("Заказ: " + name);
@@ -77,4 +80,3 @@ function order(name) {
 </script>
 </body>
 </html>
-
