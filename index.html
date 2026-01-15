@@ -32,6 +32,11 @@ fetch(API_URL)
     console.log("Данные из Sheet.best:", data);
     const catalog = document.getElementById('catalog');
 
+    // Если data не массив, пробуем распарсить как JSON
+    if (!Array.isArray(data)) {
+        try { data = JSON.parse(data); } catch(e) { console.error(e); }
+    }
+
     if (!Array.isArray(data) || data.length === 0) {
       catalog.innerHTML = "<p>Нет товаров для отображения.</p>";
       return;
@@ -39,10 +44,10 @@ fetch(API_URL)
 
     data.forEach(item => {
       const name = (item["Name"] || "Без названия").trim();
-      const image = (item["Image"] || "").trim();
+      const image = (item["Image"] || "").trim(); // убираем лишние пробелы/переносы
       const description = (item["Description"] || "").trim();
-      const quantity = Number(item["Quantity"] || 0);
-      const price = item["Price"] || "0";
+      const quantity = Number((item["Quantity"] || "0").trim());
+      const price = (item["Price"] || "0").trim();
 
       let statusText = "В наличии";
       let disabled = false;
