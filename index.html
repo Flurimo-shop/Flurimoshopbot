@@ -24,7 +24,7 @@ button:disabled { background: #ccc; cursor: not-allowed; }
 <div id="catalog"></div>
 
 <script>
-// Статический каталог товаров
+// Каталог товаров
 const products = [
   {
     name: "Тюльпаны",
@@ -61,7 +61,9 @@ products.forEach(item => {
     <div class="card-content">
       <h3>${item.name}</h3>
       <p>${item.description}</p>
-      <div class="status">${disabled ? "Нет в наличии" : "В наличии"}</div>
+      <div class="status">
+        ${disabled ? "Нет в наличии" : "В наличии: " + item.quantity}
+      </div>
       <div class="price">${item.price} ₽</div>
       <button ${disabled ? 'disabled' : ''} onclick="order('${item.name}')">Оформить</button>
     </div>
@@ -80,3 +82,5 @@ function order(name) {
 </script>
 </body>
 </html>
+
+
