@@ -16,12 +16,25 @@ header { padding: 16px; text-align: center; font-size: 22px; font-weight: 600; }
 .status { font-size: 13px; opacity: .6; margin-bottom: 10px; }
 button { width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
 button:disabled { background: #ccc; cursor: not-allowed; }
+form { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+input { padding: 8px; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; }
+#order-form { display: none; padding: 12px; background: #fff; border-radius: 14px; margin: 12px; box-shadow: 0 2px 6px rgba(0,0,0,.05); }
 </style>
 </head>
 
 <body>
 <header>🌸 Flurimo</header>
 <div id="catalog"></div>
+
+<!-- Форма оформления -->
+<div id="order-form">
+  <h3 id="form-title">Оформить заказ</h3>
+  <form id="form">
+    <input type="text" id="customer-name" placeholder="Ваше имя" required>
+    <input type="tel" id="customer-phone" placeholder="Номер телефона" required>
+    <button type="submit">Отправить заказ</button>
+  </form>
+</div>
 
 <script>
 // Каталог товаров
@@ -50,6 +63,7 @@ const products = [
 ];
 
 const catalog = document.getElementById("catalog");
+let currentOrder = null;
 
 // Создаём карточки товаров
 products.forEach(item => {
@@ -65,22 +79,60 @@ products.forEach(item => {
         ${disabled ? "Нет в наличии" : "В наличии: " + item.quantity}
       </div>
       <div class="price">${item.price} ₽</div>
-      <button ${disabled ? 'disabled' : ''} onclick="order('${item.name}')">Оформить</button>
+      <button ${disabled ? 'disabled' : ''} onclick="showOrderForm('${item.name}', ${item.price})">Оформить</button>
     </div>
   `;
   catalog.appendChild(card);
 });
 
-// Кнопка заказа
-function order(name) {
-  if (window.Telegram && Telegram.WebApp) {
-    Telegram.WebApp.sendData("Заказ Flurimo: " + name);
-  } else {
-    alert("Заказ: " + name);
-  }
+// Показ формы
+function showOrderForm(name, price) {
+  currentOrder = { name, price };
+  document.getElementById("order-form").style.display = "block";
+  document.getElementById("form-title").textContent = `Оформить заказ: ${name} (${price} ₽)`;
 }
+
+// Отправка формы
+document.getElementById("form").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const customerName = document.getElementById("customer-name").value;
+  const customerPhone = document.getElementById("customer-phone").value;
+
+  if (!currentOrder) return;
+
+  // Данные для Google Sheets через sheet.best
+  const API_URL = "https://api.sheetbest.com/sheets/83be7af9-c3e1-4c11-b369-3e52a24f0cc5";
+  const data = {
+    "Товар": currentOrder.name,
+    "Цена": currentOrder.price,
+    "Имя": customerName,
+    "Телефон": customerPhone
+  };
+
+  fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    alert("Заказ успешно отправлен!");
+    document.getElementById("order-form").style.display = "none";
+    document.getElementById("form").reset();
+
+    // Отправка данных в Telegram WebApp
+    if (window.Telegram && Telegram.WebApp) {
+      Telegram.WebApp.sendData(JSON.stringify(data));
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Ошибка отправки заказа. Попробуйте ещё раз.");
+  });
+});
 </script>
 </body>
 </html>
+
 
 
