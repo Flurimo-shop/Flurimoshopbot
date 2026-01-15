@@ -24,61 +24,55 @@ button:disabled { background: #ccc; }
 <div id="catalog"></div>
 
 <script>
-const API_URL = "https://api.sheetbest.com/sheets/193f6c1f-a255-4b91-90c4-22adf825b1a0";
+// Статичный каталог — без API
+const products = [
+  {
+    name: "Тюльпаны",
+    image: "https://drive.google.com/uc?export=view&id=1MeKVLBl8GOc-vYRHl0uirwRvO4aeSysf",
+    description: "Охапка тюльпанов 50 штук",
+    price: 7000,
+    quantity: 50
+  },
+  {
+    name: "Гвоздика кустовая розовая",
+    image: "https://drive.google.com/uc?export=view&id=17dNfpXWyWUi84eQNPdtdQzpKZ3_15ktU",
+    description: "Охапка розовой кустовой гвоздики 20 штук",
+    price: 2000,
+    quantity: 20
+  },
+  {
+    name: "Гвоздика Грин трик",
+    image: "https://drive.google.com/uc?export=view&id=1kokub4RL543Ug8QR2iD5JugxTAgIsfEd",
+    description: "Охапка гвоздики Грин трик",
+    price: 2200,
+    quantity: 10
+  }
+];
 
-fetch(API_URL)
-  .then(res => res.json())
-  .then(data => {
-    console.log("Данные из Sheet.best:", data);
-    const catalog = document.getElementById('catalog');
+const catalog = document.getElementById("catalog");
 
-    // Если data не массив, пробуем распарсить как JSON
-    if (!Array.isArray(data)) {
-        try { data = JSON.parse(data); } catch(e) { console.error(e); }
-    }
-
-    if (!Array.isArray(data) || data.length === 0) {
-      catalog.innerHTML = "<p>Нет товаров для отображения.</p>";
-      return;
-    }
-
-    data.forEach(item => {
-      const name = (item["Name"] || "Без названия").trim();
-      const image = (item["Image"] || "").trim(); // убираем лишние пробелы/переносы
-      const description = (item["Description"] || "").trim();
-      const quantity = Number((item["Quantity"] || "0").trim());
-      const price = (item["Price"] || "0").trim();
-
-      let statusText = "В наличии";
-      let disabled = false;
-
-      if (quantity <= 0) {
-        statusText = "Нет в наличии";
-        disabled = true;
-      }
-
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${image}" alt="${name}" onerror="this.style.display='none'">
-        <div class="card-content">
-          <h3>${name}</h3>
-          <p>${description}</p>
-          <div class="status">${statusText}</div>
-          <div class="price">${price} ₽</div>
-          <button ${disabled ? 'disabled' : ''} onclick="order('${name}')">Оформить</button>
-        </div>
-      `;
-      catalog.appendChild(card);
-    });
-  })
-  .catch(err => {
-    console.error("Ошибка загрузки данных:", err);
-    document.getElementById('catalog').innerHTML = "<p>Ошибка загрузки товаров.</p>";
-  });
+products.forEach(item => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `
+    <img src="${item.image}" alt="${item.name}">
+    <div class="card-content">
+      <h3>${item.name}</h3>
+      <p>${item.description}</p>
+      <div class="status">${item.quantity > 0 ? "В наличии" : "Нет в наличии"}</div>
+      <div class="price">${item.price} ₽</div>
+      <button onclick="order('${item.name}')">Оформить</button>
+    </div>
+  `;
+  catalog.appendChild(card);
+});
 
 function order(name) {
-  Telegram.WebApp.sendData("Заказ Flurimo: " + name);
+  if (typeof Telegram !== "undefined") {
+    Telegram.WebApp.sendData("Заказ Flurimo: " + name);
+  } else {
+    alert("Заказ: " + name);
+  }
 }
 </script>
 </body>
