@@ -15,9 +15,23 @@ header { padding: 16px; text-align: center; font-size: 22px; font-weight: 600; }
 .status { font-size: 13px; opacity: .6; margin-bottom: 10px; }
 button { width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
 button:disabled { background: #ccc; cursor: not-allowed; }
-#cartBox, #orderBox { background: #fff; margin: 12px; padding: 14px; border-radius: 14px; box-shadow: 0 2px 6px rgba(0,0,0,.05); }
-#cartBox { margin-top: 20px; }
+
+#cartBox {
+  position: fixed;
+  top: 80px;
+  right: 10px;
+  width: 250px;
+  background: #fff;
+  padding: 14px;
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.05);
+  display: none;
+  z-index: 1000;
+}
+#cartBox h3 { margin-top: 0; }
+#cartList { list-style: none; padding: 0; margin: 0 0 10px 0; max-height: 300px; overflow-y: auto; }
 input { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; }
+#orderBox { display:none; margin-top:12px; padding:14px; background:#fff; border-radius:14px; box-shadow:0 2px 6px rgba(0,0,0,.05);}
 </style>
 </head>
 
@@ -26,13 +40,13 @@ input { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 14px; border
 
 <div id="catalog"></div>
 
-<div id="cartBox" style="display:none;">
+<div id="cartBox">
   <h3>Корзина</h3>
   <ul id="cartList"></ul>
   <button onclick="openOrderForm()">Оформить корзину</button>
 </div>
 
-<div id="orderBox" style="display:none;">
+<div id="orderBox">
   <h3>Оформление заказа</h3>
   <input id="customerName" placeholder="Ваше имя">
   <input id="customerPhone" placeholder="Телефон">
@@ -40,11 +54,10 @@ input { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 14px; border
 </div>
 
 <script>
-const GOOGLE_SHEET_URL = "ТВОЯ_НОВАЯ_ССЫЛКА_WEB_APP"; // вставь сюда свою ссылку Web App
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxqlwcRC3lWBkw3INlyjxNiu4ydPvnOa-b42NvmahRE3cF6sRR--4Q923FEDuzKY2EZvA/exec"; // вставь сюда свою ссылку Web App
 
-/* Список товаров */
 const products = [
-  {name:"Тюльпаны", description:"Охапка тюльпанов 50 шт", price:7000, quantity:50, image:"images/tulip.jpg"},
+  {name:"Тюльпаны", description:"Охапка 50 шт", price:7000, quantity:50, image:"images/tulip.jpg"},
   {name:"Гвоздика кустовая розовая", description:"Охапка 20 шт", price:2000, quantity:20, image:"images/carnation.jpg"},
   {name:"Гвоздика Грин Трик", description:"Охапка 10 шт", price:2200, quantity:10, image:"images/greentrick.jpg"}
 ];
@@ -53,7 +66,7 @@ let cart = [];
 
 const catalog = document.getElementById("catalog");
 
-/* Создание карточек товаров */
+/* Создание карточек */
 products.forEach(p => {
   const card = document.createElement("div");
   card.className = "card";
@@ -71,9 +84,14 @@ products.forEach(p => {
   catalog.appendChild(card);
 });
 
-/* Добавление в корзину */
+/* Добавление товара в корзину */
 function addToCart(name, price, quantity){
-  cart.push({name, price, quantity});
+  const existing = cart.find(i => i.name === name);
+  if(existing){
+    existing.quantity += quantity;
+  } else {
+    cart.push({name, price, quantity});
+  }
   updateCartDisplay();
 }
 
@@ -87,14 +105,14 @@ function updateCartDisplay(){
     return;
   }
   cartBox.style.display = "block";
-  cart.forEach((item,i)=>{
+  cart.forEach(item=>{
     const li = document.createElement("li");
     li.textContent = `${item.name} — ${item.price} ₽ × ${item.quantity}`;
     cartList.appendChild(li);
   });
 }
 
-/* Открыть форму оформления */
+/* Открытие формы оформления */
 function openOrderForm(){
   document.getElementById("orderBox").style.display = "block";
   window.scrollTo(0, document.body.scrollHeight);
@@ -110,8 +128,8 @@ function sendOrder(){
   }
 
   fetch(GOOGLE_SHEET_URL, {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
     body: JSON.stringify({
       customer_name: name,
       customer_phone: phone,
@@ -133,8 +151,6 @@ function sendOrder(){
 </script>
 </body>
 </html>
-
-
 
 
 
