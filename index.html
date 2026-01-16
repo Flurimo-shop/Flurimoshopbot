@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <title>Flurimo — Магазин</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
 body { font-family: Arial, sans-serif; margin: 0; background: #faf9f7; }
-header { padding: 16px; text-align: center; font-size: 22px; font-weight: 600; position: relative; }
-.cart-button { position: absolute; right: 16px; top: 12px; font-size: 20px; cursor: pointer; }
+header { padding: 16px; text-align: center; font-size: 22px; font-weight: 600; }
 .card { background: #fff; margin: 12px; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,.05); }
 .card img { width: 100%; height: 240px; object-fit: cover; }
 .card-content { padding: 14px; }
@@ -15,128 +15,99 @@ header { padding: 16px; text-align: center; font-size: 22px; font-weight: 600; p
 .status { font-size: 13px; opacity: .6; margin-bottom: 10px; }
 button { width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
 button:disabled { background: #ccc; cursor: not-allowed; }
-#cart { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.7); overflow-y: auto; padding-top: 60px; }
-#cart-content { background: #fff; margin: auto; padding: 20px; border-radius: 14px; max-width: 500px; }
-.cart-item { display: flex; justify-content: space-between; margin-bottom: 10px; }
-.cart-item span { margin: 0 5px; }
+#cartBox, #orderBox { background: #fff; margin: 12px; padding: 14px; border-radius: 14px; box-shadow: 0 2px 6px rgba(0,0,0,.05); }
+#cartBox { margin-top: 20px; }
 input { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 14px; border-radius: 6px; border: 1px solid #ccc; }
 </style>
 </head>
-<body>
 
-<header>
-  🌸 Flurimo
-  <span class="cart-button" onclick="toggleCart()">🛒 <span id="cart-count">0</span></span>
-</header>
+<body>
+<header>🌸 Flurimo</header>
 
 <div id="catalog"></div>
 
-<!-- Корзина -->
-<div id="cart">
-  <div id="cart-content">
-    <h3>Корзина</h3>
-    <div id="cart-items"></div>
-    <div style="margin-top: 10px; font-weight:bold;">Итого: <span id="cart-total">0</span> ₽</div>
-    <input id="customerName" placeholder="Ваше имя">
-    <input id="customerPhone" placeholder="Телефон">
-    <button onclick="checkout()">Оформить заказ</button>
-    <button style="margin-top: 10px; background:#ccc;color:#000;" onclick="toggleCart()">Закрыть</button>
-  </div>
+<div id="cartBox" style="display:none;">
+  <h3>Корзина</h3>
+  <ul id="cartList"></ul>
+  <button onclick="openOrderForm()">Оформить корзину</button>
+</div>
+
+<div id="orderBox" style="display:none;">
+  <h3>Оформление заказа</h3>
+  <input id="customerName" placeholder="Ваше имя">
+  <input id="customerPhone" placeholder="Телефон">
+  <button onclick="sendOrder()">Отправить заказ</button>
 </div>
 
 <script>
-/* 🔗 Вставь сюда свой новый URL Web App после redeploy */
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbyNk4kU60lvlM25VVgWt4-3W0V4OJ3I944UXPP5y5xmhJjBAnAwz7z1fxldPb4GbvWYAA/exec";
+const GOOGLE_SHEET_URL = "ТВОЯ_НОВАЯ_ССЫЛКА_WEB_APP"; // вставь сюда свою ссылку Web App
 
-/* 🛍 ТОВАРЫ */
+/* Список товаров */
 const products = [
-  { name: "Тюльпаны", description: "Охапка тюльпанов 50 штук", price: 7000, quantity: 50, image: "images/tulip.jpg" },
-  { name: "Гвоздика кустовая розовая", description: "Охапка розовой кустовой гвоздики 20 штук", price: 2000, quantity: 20, image: "images/carnation.jpg" },
-  { name: "Гвоздика Грин Трик", description: "Охапка гвоздики Грин Трик 10 штук", price: 2200, quantity: 10, image: "images/greentrick.jpg" }
+  {name:"Тюльпаны", description:"Охапка тюльпанов 50 шт", price:7000, quantity:50, image:"images/tulip.jpg"},
+  {name:"Гвоздика кустовая розовая", description:"Охапка 20 шт", price:2000, quantity:20, image:"images/carnation.jpg"},
+  {name:"Гвоздика Грин Трик", description:"Охапка 10 шт", price:2200, quantity:10, image:"images/greentrick.jpg"}
 ];
 
 let cart = [];
 
-/* 🧱 КАРТОЧКИ ТОВАРОВ */
 const catalog = document.getElementById("catalog");
+
+/* Создание карточек товаров */
 products.forEach(p => {
-  const disabled = p.quantity <= 0;
   const card = document.createElement("div");
   card.className = "card";
+  const disabled = p.quantity <= 0;
   card.innerHTML = `
-    <img src="${p.image}">
+    <img src="${p.image}" alt="${p.name}">
     <div class="card-content">
       <h3>${p.name}</h3>
       <p>${p.description}</p>
-      <div class="status">${disabled ? "Нет в наличии" : "В наличии: " + p.quantity}</div>
+      <div class="status">${disabled ? "Нет в наличии" : "В наличии: "+p.quantity}</div>
       <div class="price">${p.price} ₽</div>
-      <button ${disabled ? "disabled" : ""} onclick="addToCart({name:'${p.name}', price:${p.price}})">Добавить в корзину</button>
+      <button ${disabled ? "disabled" : ""} onclick="addToCart('${p.name}',${p.price},1)">Добавить в корзину</button>
     </div>
   `;
   catalog.appendChild(card);
 });
 
-/* 🛒 КОРЗИНА */
-function toggleCart() {
-  const cartDiv = document.getElementById("cart");
-  cartDiv.style.display = cartDiv.style.display === "block" ? "none" : "block";
-  renderCart();
+/* Добавление в корзину */
+function addToCart(name, price, quantity){
+  cart.push({name, price, quantity});
+  updateCartDisplay();
 }
 
-function addToCart(item) {
-  const existing = cart.find(i => i.name === item.name);
-  if (existing) existing.quantity += 1;
-  else cart.push({...item, quantity:1});
-  updateCartCount();
-}
-
-function removeFromCart(name) {
-  cart = cart.filter(i => i.name !== name);
-  updateCartCount();
-  renderCart();
-}
-
-function changeQuantity(name, delta) {
-  const item = cart.find(i => i.name === name);
-  if (!item) return;
-  item.quantity += delta;
-  if (item.quantity <= 0) removeFromCart(name);
-  renderCart();
-  updateCartCount();
-}
-
-function updateCartCount() {
-  const count = cart.reduce((sum,i)=>sum+i.quantity,0);
-  document.getElementById("cart-count").innerText = count;
-}
-
-function renderCart() {
-  const container = document.getElementById("cart-items");
-  container.innerHTML = "";
-  let total = 0;
-  cart.forEach(i => {
-    total += i.price * i.quantity;
-    const div = document.createElement("div");
-    div.className = "cart-item";
-    div.innerHTML = `
-      ${i.name} x${i.quantity} - ${i.price*i.quantity} ₽
-      <span>
-        <button onclick="changeQuantity('${i.name}',-1)">-</button>
-        <button onclick="changeQuantity('${i.name}',1)">+</button>
-        <button onclick="removeFromCart('${i.name}')">❌</button>
-      </span>
-    `;
-    container.appendChild(div);
+/* Обновление видимой корзины */
+function updateCartDisplay(){
+  const cartBox = document.getElementById("cartBox");
+  const cartList = document.getElementById("cartList");
+  cartList.innerHTML = "";
+  if(cart.length === 0){
+    cartBox.style.display = "none";
+    return;
+  }
+  cartBox.style.display = "block";
+  cart.forEach((item,i)=>{
+    const li = document.createElement("li");
+    li.textContent = `${item.name} — ${item.price} ₽ × ${item.quantity}`;
+    cartList.appendChild(li);
   });
-  document.getElementById("cart-total").innerText = total;
 }
 
-/* 📤 ОФОРМЛЕНИЕ ЗАКАЗА */
-function checkout() {
-  if(cart.length===0){ alert("Корзина пуста"); return; }
+/* Открыть форму оформления */
+function openOrderForm(){
+  document.getElementById("orderBox").style.display = "block";
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+/* Отправка заказа */
+function sendOrder(){
   const name = document.getElementById("customerName").value;
   const phone = document.getElementById("customerPhone").value;
-  if(!name || !phone){ alert("Введите имя и телефон"); return; }
+  if(!name || !phone){
+    alert("Введите имя и телефон");
+    return;
+  }
 
   fetch(GOOGLE_SHEET_URL, {
     method: "POST",
@@ -146,19 +117,20 @@ function checkout() {
       customer_phone: phone,
       order: cart
     })
-  }).then(()=>{
+  })
+  .then(()=>{
     alert("✅ Заказ отправлен!");
     cart = [];
-    updateCartCount();
-    toggleCart();
+    updateCartDisplay();
+    document.getElementById("orderBox").style.display = "none";
     document.getElementById("customerName").value = "";
     document.getElementById("customerPhone").value = "";
-  }).catch(()=>{
+  })
+  .catch(()=>{
     alert("❌ Ошибка отправки");
   });
 }
 </script>
-
 </body>
 </html>
 
