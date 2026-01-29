@@ -62,6 +62,7 @@ const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwXpJHTIoEBvjt
 const products = [
 {name:"Тюльпаны Красные", description:"Охапка 50 шт", price:7000, quantity:50, image:"images/tulipred.jpg"},
 {name:"Тюльпаны Пионовидные", description:"Охапка 50 шт", price:7000, quantity:50, image:"images/tulipp.jpg"},
+{name:"Тюльпаны Тиз Бутс", description:"Охапка 50 шт", price:9000, quantity:50, image:"images/tulipspich.jpg"},
 {name:"Тюльпаны Белые", description:"Охапка 50 шт", price:8000, quantity:50, image:"images/tulipb.jpg"},
 {name:"Тюльпаны Коламбус", description:"Охапка 50 шт", price:7000, quantity:50, image:"images/tulipk.jpg"},
 {name:"Тюльпаны Розовые", description:"Охапка 50 шт", price:8000, quantity:50, image:"images/tulipr.jpg"},
@@ -69,22 +70,24 @@ const products = [
 {name:"Тюльпаны Желтые", description:"Охапка 50 шт", price:8000, quantity:50, image:"images/tulipseloy.jpg"},
 {name:"Пион", description:"Охапка 10 шт", price:6000, quantity:10, image:"images/piong.jpg"},
 {name:"Роза кустовая Сильва Пинк", description:"Охапка 10 шт", price:5000, quantity:10, image:"images/rosesp.jpg"},
+{name:"Роза кустовая Julieta", description:"Охапка 10 шт", price:4800, quantity:10, image:"images/rosejulia.jpg"},
 {name:"Роза кустовая Бомбастик", description:"Охапка 10 шт", price:4900, quantity:10, image:"images/rosebomb.jpg"},
 {name:"Роза кустовая Мисти баблз", description:"Охапка 10 шт", price:4900, quantity:10, image:"images/rosem.jpg"},
+{name:"Роза Мандарин", description:"Охапка 20 шт", price:6500, quantity:20, image:"images/rosebomandarin.jpg"},  
 {name:"Роза Мондиаль", description:"Охапка 20 шт", price:5000, quantity:20, image:"images/rosemon.jpg"},
 {name:"Роза Explorer", description:"Охапка 20 шт", price:5000, quantity:20, image:"images/roseexpl.jpg"},
 {name:"Роза Пинк охара", description:"Охапка 15 шт", price:6500, quantity:15, image:"images/rosepx.jpg"},
 {name:"Роза Кантри блю", description:"Охапка 20 шт", price:6500, quantity:20, image:"images/rosekb.jpg"},
-{name:"Роза Пинк Флойд", description:"Охапка 20 шт", price:5000, quantity:20, image:"images/rosepf.jpg"},
-{name:"Роза Вайт охара", description:"Охапка 15 шт", price:6500, quantity:15, image:"images/rosevx.jpg"},
 {name:"Гвоздика кустовая розовая", description:"Охапка 20 шт", price:2000, quantity:20, image:"images/carnation.jpg"},
 {name:"Гвоздика Грин Трик", description:"Охапка 10 шт", price:2200, quantity:10, image:"images/greentrick.jpg"},
 {name:"Гвоздика белая", description:"Охапка 20 шт", price:3000, quantity:20, image:"images/carnationw.jpg"},
+{name:"Гвоздика розовая", description:"Охапка 20 шт", price:3000, quantity:20, image:"images/carnationr.jpg"},  
 {name:"Эустома белая", description:"Охапка 10 шт", price:3800, quantity:10, image:"images/carnationyst.jpg"},
 {name:"Фрезия белая", description:"Охапка 10 шт", price:2500, quantity:10, image:"images/carnationfrb.jpg"},
 {name:"Гиперикум", description:"Охапка 10 шт", price:3000, quantity:10, image:"images/giper.jpg"},
 {name:"Гортензия белая", description:"Охапка 10 шт", price:5000, quantity:10, image:"images/gortenzv.jpg"},
-  {name:"Гортензия розовая", description:"Охапка 10 шт", price:5000, quantity:10, image:"images/gortenzroz.jpg"},
+{name:"Гортензия розовая", description:"Охапка 10 шт", price:5000, quantity:10, image:"images/gortenzroz.jpg"},
+{name:"Гортензия голубая", description:"Охапка 10 шт", price:5000, quantity:10, image:"images/gortenzblue.jpg"},
 {name:"Ранункулюсы белые", description:"Охапка 10 шт", price:5000, quantity:10, image:"images/ranynb.jpg"},
 {name:"Ранункулюсы розовые", description:"Охапка 10 шт", price:5000, quantity:10, image:"images/ranynr.jpg"},
 {name:"Ранункулюсы ханой", description:"Охапка 10 шт", price:5000, quantity:10, image:"images/ranynx.jpg"},
@@ -175,6 +178,7 @@ function sendOrder(){
 </script>
 </body>
 </html>
+
 
 
 
