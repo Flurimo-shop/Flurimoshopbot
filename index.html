@@ -158,14 +158,10 @@ function showFlowers(){
 }
 
 function showJewelry(){
-  catalog.innerHTML = `
-    <div class="card">
-      <div class="card-content">
-        <h3>Украшения скоро появятся ✨</h3>
-      </div>
-    </div>
-  `;
+  const jewelry = products.filter(p => p.category === "jewelry");
+  renderProducts(jewelry);
 }
+
 
 showFlowers();
   
