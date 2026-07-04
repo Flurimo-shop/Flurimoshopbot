@@ -108,6 +108,7 @@ input { width: 100%; padding: 10px; margin-bottom: 10px; font-size: 14px; border
  <div id="categories">
   <div id="categories">
   <button onclick="showBerry()">🍓 Ягодная коллекция</button>
+  <button onclick="showLeopard()">🐆 Леопардовая коллекция</button>
 </div>
    
 <div id="catalog"></div>
@@ -138,7 +139,9 @@ const products = [
 {category:"berry", name:"Браслет Черника жемчужная", description:"1", price:2000, quantity:1, image:"images/braslechernikajemc.jpg"},
 {category:"berry", name:"Браслет Черника", description:"1", price:2200, quantity:1, image:"images/braslechernika.jpg"},
 {category:"berry", name:"Браслет Ежевика жемчужная", description:"1", price:2000, quantity:1, image:"images/braseja.jpg"},
-{category:"berry", name:"Серьги Ежевика", description:"1", price:1500, quantity:1, image:"images/sergiej.jpg"}  
+{category:"berry", name:"Серьги Ежевика", description:"1", price:1500, quantity:1, image:"images/sergiej.jpg"},
+{category:"leopard", name:"Браслет Леопард", description:"1", price:1990, quantity:1, image:"images/leobraslwt.jpg"},
+{category:"leopard", name:"Колье Леопард", description:"1", price:2790, quantity:1, image:"images/leokole.jpg"}  
 ];
 
 let cart = [];
@@ -180,6 +183,12 @@ function showBerry(){
 }
 
 showBerry();
+
+  function showLeopard(){
+  const leopard = products.filter(p => p.category === "leopard");
+  renderProducts(leopard);
+}
+
   
 /* Добавление товара в корзину */
 function addToCart(name, price, quantity){
