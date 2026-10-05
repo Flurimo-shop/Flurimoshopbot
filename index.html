@@ -632,6 +632,37 @@
       }
     }
 
+
+    /* =========================
+       ORDER SUCCESS
+    ========================= */
+
+    .order-success {
+      text-align: center;
+      padding: 28px 8px 8px;
+    }
+
+    .order-success-icon {
+      width: 64px; height: 64px; margin: 0 auto 20px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--cream); color: var(--berry); font-size: 28px;
+    }
+
+    .order-success-title {
+      margin: 0 0 12px; font-family: 'Playfair Display', serif;
+      font-size: 32px; line-height: 1.15;
+    }
+
+    .order-success-text {
+      margin: 0 auto 24px; max-width: 430px; color: var(--muted);
+      font-size: 15px; line-height: 1.6;
+    }
+
+    .order-success-number {
+      display: inline-block; margin-bottom: 24px; padding: 10px 16px;
+      border-radius: 999px; background: var(--bg); font-weight: 700; letter-spacing: .02em;
+    }
+
     .modal-head {
       display: flex;
       align-items: center;
@@ -914,7 +945,7 @@
     </div>
 
     <div class="topbar-subtitle">
-      jewelry studio
+      Flurimo Jewelry
     </div>
   </header>
 
@@ -939,14 +970,14 @@
             jewelry with character
           </div>
 
-        <h1 class="hero-title">
-  Украшения,<br>
-  которые влюбляют
-</h1>
+          <h1 class="hero-title">
+            Украшения,<br>
+            которые остаются
+          </h1>
 
-<div class="hero-description">
-  Жить красиво каждый день
-</div>
+          <div class="hero-description">
+            Маленькие детали, которые делают образ особенным.
+          </div>
 
         </div>
       </div>
@@ -1086,7 +1117,7 @@
 
         <div>
           <div class="eyebrow">
-            flurimo studio
+            Flurimo Jewelry
           </div>
 
           <h2
@@ -1344,6 +1375,32 @@
   </div>
 
 
+
+
+  <!-- =========================
+       ORDER SUCCESS MODAL
+  ========================== -->
+
+  <div class="modal" id="orderSuccessModal">
+    <div class="modal-content">
+      <div class="order-success">
+        <div class="order-success-icon">♥</div>
+        <h2 class="order-success-title">Заказ оформлен 🤍</h2>
+        <p class="order-success-text">
+          Спасибо, что выбрали FLURIMO.<br><br>
+          <strong>Менеджер свяжется с вами в Telegram</strong>
+          для подтверждения заказа и оплаты.
+        </p>
+        <div class="order-success-number">
+          Ваш заказ <span id="orderNumber">FL-1042</span>
+        </div>
+        <button class="checkout-button" type="button" onclick="returnToStore()">
+          Вернуться в магазин
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- =========================
        TOAST
   ========================== -->
@@ -1353,6 +1410,8 @@
     id="toast"
   ></div>
 
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <script>
 
@@ -2807,7 +2866,12 @@
           : null;
 
 
+      const orderNumber =
+        "FL-" +
+        String(Math.floor(1000 + Math.random() * 9000));
+
       const payload = {
+        order_number: orderNumber,
 
         name: name,
 
@@ -2910,37 +2974,17 @@
           "checkoutModal"
         );
 
+        document
+          .getElementById("orderNumber")
+          .textContent = orderNumber;
 
-        showToast(
-          "Заказ отправлен ♥"
-        );
+        document
+          .getElementById("orderSuccessModal")
+          .classList.add("show");
 
+        document.body.style.overflow = "hidden";
 
         haptic("success");
-
-
-        /*
-          Если Mini App открыт внутри
-          Telegram, можно закрыть его
-          после небольшой задержки.
-        */
-
-        if (
-          tg &&
-          tg.close
-        ) {
-
-          setTimeout(() => {
-
-            try {
-
-              tg.close();
-
-            } catch (error) {}
-
-          }, 1800);
-
-        }
 
 
       } catch (error) {
@@ -2969,6 +3013,19 @@
     }
 
 
+    function returnToStore() {
+
+      closeModal("orderSuccessModal");
+      document.body.style.overflow = "";
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+
     /* =====================================================
        ESCAPE / BACK BUTTON
     ===================================================== */
@@ -2984,6 +3041,8 @@
           closeModal("cartModal");
 
           closeModal("checkoutModal");
+
+          closeModal("orderSuccessModal");
 
         }
 
@@ -3003,16 +3062,9 @@
   </script>
 
 
-  <!--
-    Telegram WebApp SDK.
-  -->
-
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 </body>
 </html>
-
-
 
 
 
