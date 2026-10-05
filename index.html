@@ -337,6 +337,7 @@
       border: 1px solid rgba(36,29,26,.06);
       box-shadow: 0 8px 28px rgba(40, 26, 19, .055);
       transition: transform .25s ease, box-shadow .25s ease;
+      cursor: pointer;
     }
 
     .product-card:hover {
@@ -496,6 +497,219 @@
       transform: scale(.95);
     }
 
+    /* =====================================================
+       LARGE PRODUCT MODAL
+    ===================================================== */
+
+    .product-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(20,15,12,.58);
+      backdrop-filter: blur(9px);
+      -webkit-backdrop-filter: blur(9px);
+    }
+
+    .product-modal.show {
+      display: flex;
+    }
+
+    .product-modal-content {
+      position: relative;
+      width: min(980px, 100%);
+      max-height: 92vh;
+      overflow-y: auto;
+      background: #fffdf9;
+      border-radius: 30px;
+      box-shadow: 0 30px 90px rgba(30,20,16,.28);
+      animation: productModalIn .3s ease;
+    }
+
+    @keyframes productModalIn {
+      from {
+        opacity: 0;
+        transform: translateY(25px) scale(.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .product-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 20;
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(10px);
+      color: var(--text);
+      font-size: 22px;
+      line-height: 1;
+      box-shadow: 0 6px 20px rgba(0,0,0,.12);
+    }
+
+    .product-modal-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr);
+    }
+
+    /* Большая галерея */
+
+    .product-modal-gallery {
+      position: relative;
+      background: #eee5db;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      touch-action: pan-y;
+    }
+
+    .product-modal-track {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      transition: transform .4s cubic-bezier(.22,.61,.36,1);
+    }
+
+    .product-modal-slide {
+      min-width: 100%;
+      height: 100%;
+      user-select: none;
+    }
+
+    .product-modal-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .product-modal-arrow {
+      position: absolute;
+      z-index: 10;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,.84);
+      backdrop-filter: blur(10px);
+      color: var(--text);
+      font-size: 27px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.12);
+    }
+
+    .product-modal-arrow.left {
+      left: 15px;
+    }
+
+    .product-modal-arrow.right {
+      right: 15px;
+    }
+
+    .product-modal-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 30px;
+      background: rgba(20,15,12,.30);
+      backdrop-filter: blur(10px);
+    }
+
+    .product-modal-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.55);
+      transition: all .25s ease;
+    }
+
+    .product-modal-dot.active {
+      width: 20px;
+      border-radius: 20px;
+      background: white;
+    }
+
+    /* Информация о товаре */
+
+    .product-modal-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 42px;
+    }
+
+    .product-modal-category {
+      color: var(--berry);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .2em;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .product-modal-name {
+      margin: 0;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(32px, 4vw, 48px);
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+
+    .product-modal-description {
+      margin: 18px 0 25px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+      max-width: 430px;
+    }
+
+    .product-modal-price {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .product-modal-add {
+      width: 100%;
+      min-height: 56px;
+      border: none;
+      border-radius: 17px;
+      background: var(--text);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      transition: background .2s ease, transform .2s ease;
+    }
+
+    .product-modal-add:hover {
+      background: var(--berry);
+    }
+
+    .product-modal-add:active {
+      transform: scale(.98);
+    }
+
     /* =========================
        EMPTY STATE
     ========================= */
@@ -627,11 +841,11 @@
       from {
         transform: translateY(100%);
       }
+
       to {
         transform: translateY(0);
       }
     }
-
 
     /* =========================
        ORDER SUCCESS
@@ -643,24 +857,41 @@
     }
 
     .order-success-icon {
-      width: 64px; height: 64px; margin: 0 auto 20px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      background: var(--cream); color: var(--berry); font-size: 28px;
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--cream);
+      color: var(--berry);
+      font-size: 28px;
     }
 
     .order-success-title {
-      margin: 0 0 12px; font-family: 'Playfair Display', serif;
-      font-size: 32px; line-height: 1.15;
+      margin: 0 0 12px;
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      line-height: 1.15;
     }
 
     .order-success-text {
-      margin: 0 auto 24px; max-width: 430px; color: var(--muted);
-      font-size: 15px; line-height: 1.6;
+      margin: 0 auto 24px;
+      max-width: 430px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
     }
 
     .order-success-number {
-      display: inline-block; margin-bottom: 24px; padding: 10px 16px;
-      border-radius: 999px; background: var(--bg); font-weight: 700; letter-spacing: .02em;
+      display: inline-block;
+      margin-bottom: 24px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: var(--bg);
+      font-weight: 700;
+      letter-spacing: .02em;
     }
 
     .modal-head {
@@ -896,6 +1127,7 @@
     }
 
     @media (min-width: 1100px) {
+
       .catalog-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
@@ -906,10 +1138,69 @@
     }
 
     /* =========================
+       MOBILE PRODUCT MODAL
+    ========================= */
+
+    @media (max-width: 759px) {
+
+      .product-modal {
+        align-items: flex-end;
+        padding: 0;
+      }
+
+      .product-modal-content {
+        width: 100%;
+        max-height: 94vh;
+        border-radius: 28px 28px 0 0;
+        overflow-y: auto;
+      }
+
+      .product-modal-layout {
+        display: block;
+      }
+
+      .product-modal-gallery {
+        width: 100%;
+        aspect-ratio: 1 / 1.05;
+      }
+
+      .product-modal-info {
+        padding: 25px 22px 30px;
+      }
+
+      .product-modal-name {
+        font-size: 34px;
+      }
+
+      .product-modal-description {
+        font-size: 13px;
+        margin: 15px 0 20px;
+      }
+
+      .product-modal-price {
+        font-size: 22px;
+        margin-bottom: 18px;
+      }
+
+      .product-modal-close {
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+      }
+
+      .product-modal-arrow {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    /* =========================
        SMALL MOBILE
     ========================= */
 
     @media (max-width: 390px) {
+
       .catalog-grid {
         gap: 10px;
       }
@@ -940,13 +1231,17 @@
   ========================== -->
 
   <header class="topbar">
+
     <div>
-      <div class="logo">flur<span>i</span>mo</div>
+      <div class="logo">
+        flur<span>i</span>mo
+      </div>
     </div>
 
     <div class="topbar-subtitle">
       Flurimo Jewelry
     </div>
+
   </header>
 
 
@@ -957,6 +1252,7 @@
     ========================== -->
 
     <section class="hero">
+
       <img
         src="images/banner.jpg"
         alt="Flurimo Jewelry"
@@ -964,6 +1260,7 @@
       >
 
       <div class="hero-overlay">
+
         <div class="hero-content">
 
           <div class="hero-kicker">
@@ -971,16 +1268,18 @@
           </div>
 
           <h1 class="hero-title">
-  Украшения,<br>
-  которые влюбляют
-</h1>
+            Украшения,<br>
+            которые влюбляют
+          </h1>
 
-<div class="hero-description">
-  Жить красиво каждый день
-</div>
+          <div class="hero-description">
+            Жить красиво каждый день
+          </div>
 
         </div>
+
       </div>
+
     </section>
 
 
@@ -993,8 +1292,15 @@
       <div class="section-head">
 
         <div>
-          <div class="eyebrow">discover</div>
-          <h2 class="section-title">Коллекции</h2>
+
+          <div class="eyebrow">
+            discover
+          </div>
+
+          <h2 class="section-title">
+            Коллекции
+          </h2>
+
         </div>
 
         <div class="section-note">
@@ -1009,6 +1315,7 @@
         <div class="collections">
 
           <!-- ЯГОДЫ -->
+
           <div
             class="collection"
             onclick="showCategory('berry')"
@@ -1040,6 +1347,7 @@
 
 
           <!-- ЛЕОПАРД -->
+
           <div
             class="collection"
             onclick="showCategory('leopard')"
@@ -1071,6 +1379,7 @@
 
 
           <!-- ОБЕРЕГИ -->
+
           <div
             class="collection"
             onclick="showCategory('amulets')"
@@ -1116,6 +1425,7 @@
       <div class="section-head">
 
         <div>
+
           <div class="eyebrow">
             Flurimo Jewelry
           </div>
@@ -1126,6 +1436,7 @@
           >
             Все украшения
           </h2>
+
         </div>
 
       </div>
@@ -1155,6 +1466,120 @@
     </section>
 
   </main>
+
+
+  <!-- =====================================================
+       LARGE PRODUCT MODAL
+  ===================================================== -->
+
+  <div
+    class="product-modal"
+    id="productModal"
+    onclick="outsideProductModal(event)"
+  >
+
+    <div class="product-modal-content">
+
+      <button
+        class="product-modal-close"
+        type="button"
+        onclick="closeProductModal()"
+        aria-label="Закрыть"
+      >
+        ×
+      </button>
+
+
+      <div class="product-modal-layout">
+
+        <!-- =========================
+             BIG PRODUCT GALLERY
+        ========================== -->
+
+        <div
+          class="product-modal-gallery"
+          id="productModalGallery"
+        >
+
+          <div
+            class="product-modal-track"
+            id="productModalTrack"
+          ></div>
+
+
+          <button
+            class="product-modal-arrow left"
+            type="button"
+            onclick="changeProductModalGallery(-1)"
+            aria-label="Предыдущее фото"
+          >
+            ‹
+          </button>
+
+
+          <button
+            class="product-modal-arrow right"
+            type="button"
+            onclick="changeProductModalGallery(1)"
+            aria-label="Следующее фото"
+          >
+            ›
+          </button>
+
+
+          <div
+            class="product-modal-dots"
+            id="productModalDots"
+          ></div>
+
+        </div>
+
+
+        <!-- =========================
+             PRODUCT INFO
+        ========================== -->
+
+        <div class="product-modal-info">
+
+          <div
+            class="product-modal-category"
+            id="productModalCategory"
+          ></div>
+
+
+          <h2
+            class="product-modal-name"
+            id="productModalName"
+          ></h2>
+
+
+          <div
+            class="product-modal-description"
+            id="productModalDescription"
+          ></div>
+
+
+          <div
+            class="product-modal-price"
+            id="productModalPrice"
+          ></div>
+
+
+          <button
+            class="product-modal-add"
+            id="productModalAdd"
+            type="button"
+          >
+            Добавить в корзину
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
 
 
   <!-- =========================
@@ -1238,18 +1663,41 @@
       <div class="cart-summary">
 
         <div class="summary-row">
-          <span>Товары</span>
-          <span id="summaryItems">0 ₽</span>
+
+          <span>
+            Товары
+          </span>
+
+          <span id="summaryItems">
+            0 ₽
+          </span>
+
         </div>
+
 
         <div class="summary-row">
-          <span>Количество</span>
-          <span id="summaryCount">0</span>
+
+          <span>
+            Количество
+          </span>
+
+          <span id="summaryCount">
+            0
+          </span>
+
         </div>
 
+
         <div class="summary-row total">
-          <span>Итого</span>
-          <span id="summaryTotal">0 ₽</span>
+
+          <span>
+            Итого
+          </span>
+
+          <span id="summaryTotal">
+            0 ₽
+          </span>
+
         </div>
 
 
@@ -1350,11 +1798,15 @@
         <div class="cart-summary">
 
           <div class="summary-row total">
-            <span>К оплате</span>
+
+            <span>
+              К оплате
+            </span>
 
             <span id="checkoutTotal">
               0 ₽
             </span>
+
           </div>
 
         </div>
@@ -1375,31 +1827,64 @@
   </div>
 
 
-
-
   <!-- =========================
        ORDER SUCCESS MODAL
   ========================== -->
 
-  <div class="modal" id="orderSuccessModal">
+  <div
+    class="modal"
+    id="orderSuccessModal"
+  >
+
     <div class="modal-content">
+
       <div class="order-success">
-        <div class="order-success-icon">♥</div>
-        <h2 class="order-success-title">Заказ оформлен 🤍</h2>
-        <p class="order-success-text">
-          Спасибо, что выбрали FLURIMO.<br><br>
-          <strong>Менеджер свяжется с вами в Telegram</strong>
-          для подтверждения заказа и оплаты.
-        </p>
-        <div class="order-success-number">
-          Ваш заказ <span id="orderNumber">FL-1042</span>
+
+        <div class="order-success-icon">
+          ♥
         </div>
-        <button class="checkout-button" type="button" onclick="returnToStore()">
+
+        <h2 class="order-success-title">
+          Заказ оформлен 🤍
+        </h2>
+
+        <p class="order-success-text">
+
+          Спасибо, что выбрали FLURIMO.
+
+          <br><br>
+
+          <strong>
+            Менеджер свяжется с вами в Telegram
+          </strong>
+
+          для подтверждения заказа и оплаты.
+
+        </p>
+
+        <div class="order-success-number">
+
+          Ваш заказ
+          <span id="orderNumber">
+            FL-1042
+          </span>
+
+        </div>
+
+        <button
+          class="checkout-button"
+          type="button"
+          onclick="returnToStore()"
+        >
           Вернуться в магазин
         </button>
+
       </div>
+
     </div>
+
   </div>
+
 
   <!-- =========================
        TOAST
@@ -1425,17 +1910,31 @@
         ? window.Telegram.WebApp
         : null;
 
+
     if (tg) {
+
       tg.ready();
+
       tg.expand();
 
+
       if (tg.setHeaderColor) {
-        tg.setHeaderColor("#f7f2eb");
+
+        tg.setHeaderColor(
+          "#f7f2eb"
+        );
+
       }
 
+
       if (tg.setBackgroundColor) {
-        tg.setBackgroundColor("#f7f2eb");
+
+        tg.setBackgroundColor(
+          "#f7f2eb"
+        );
+
       }
+
     }
 
 
@@ -1449,22 +1948,6 @@
 
     /* =====================================================
        ТОВАРЫ
-       =====================================================
-
-       ВАЖНО:
-
-       Для каждого товара можно поставить 5 фотографий.
-
-       Формат:
-
-       images: [
-         "images/photo-01.jpg",
-         "images/photo-02.jpg",
-         "images/photo-03.jpg",
-         "images/photo-04.jpg",
-         "images/photo-05.jpg"
-       ]
-
     ===================================================== */
 
     const products = [
@@ -1697,16 +2180,9 @@
       },
 
 
-      /* =====================================================
+      /* =========================
          ОБЕРЕГИ
-      =====================================================
-
-         Здесь можно добавлять свои товары.
-
-         Сейчас оставлены 3 примера.
-
-      ===================================================== */
-
+      ========================== */
 
       {
         id: "amulet-1",
@@ -1786,31 +2262,55 @@
 
     const galleryIndexes = {};
 
+    let currentProductModalId = null;
+
+    let currentProductModalIndex = 0;
+
 
     /* =====================================================
        DOM
     ===================================================== */
 
     const productsGrid =
-      document.getElementById("productsGrid");
+      document.getElementById(
+        "productsGrid"
+      );
+
 
     const catalogTitle =
-      document.getElementById("catalogTitle");
+      document.getElementById(
+        "catalogTitle"
+      );
+
 
     const emptyState =
-      document.getElementById("emptyState");
+      document.getElementById(
+        "emptyState"
+      );
+
 
     const cartBar =
-      document.getElementById("cartBar");
+      document.getElementById(
+        "cartBar"
+      );
+
 
     const cartCount =
-      document.getElementById("cartCount");
+      document.getElementById(
+        "cartCount"
+      );
+
 
     const cartTotal =
-      document.getElementById("cartTotal");
+      document.getElementById(
+        "cartTotal"
+      );
+
 
     const cartItems =
-      document.getElementById("cartItems");
+      document.getElementById(
+        "cartItems"
+      );
 
 
     /* =====================================================
@@ -1818,7 +2318,11 @@
     ===================================================== */
 
     function formatPrice(price) {
-      return new Intl.NumberFormat("ru-RU").format(price) + " ₽";
+
+      return new Intl.NumberFormat(
+        "ru-RU"
+      ).format(price) + " ₽";
+
     }
 
 
@@ -1826,7 +2330,9 @@
        HAPTIC
     ===================================================== */
 
-    function haptic(type = "light") {
+    function haptic(
+      type = "light"
+    ) {
 
       try {
 
@@ -1836,7 +2342,9 @@
           tg.HapticFeedback.impactOccurred
         ) {
 
-          tg.HapticFeedback.impactOccurred(type);
+          tg.HapticFeedback.impactOccurred(
+            type
+          );
 
         }
 
@@ -1851,20 +2359,38 @@
 
     let toastTimer;
 
+
     function showToast(message) {
 
       const toast =
-        document.getElementById("toast");
+        document.getElementById(
+          "toast"
+        );
 
-      toast.textContent = message;
 
-      toast.classList.add("show");
+      toast.textContent =
+        message;
 
-      clearTimeout(toastTimer);
 
-      toastTimer = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2200);
+      toast.classList.add(
+        "show"
+      );
+
+
+      clearTimeout(
+        toastTimer
+      );
+
+
+      toastTimer =
+        setTimeout(() => {
+
+          toast.classList.remove(
+            "show"
+          );
+
+        }, 2200);
+
     }
 
 
@@ -1872,234 +2398,406 @@
        RENDER PRODUCTS
     ===================================================== */
 
-    function renderProducts(list) {
+    function renderProducts(
+      list
+    ) {
 
-      productsGrid.innerHTML = "";
+      productsGrid.innerHTML =
+        "";
+
 
       emptyState.classList.toggle(
         "show",
         list.length === 0
       );
 
-      list.forEach((product) => {
 
-        if (!galleryIndexes[product.id]) {
-          galleryIndexes[product.id] = 0;
-        }
-
-        const card =
-          document.createElement("article");
-
-        card.className = "product-card";
-
-        const gallery =
-          document.createElement("div");
-
-        gallery.className = "product-gallery";
-
-        gallery.dataset.productId =
-          product.id;
-
-
-        /* TRACK */
-
-        const track =
-          document.createElement("div");
-
-        track.className = "gallery-track";
-
-        product.images.forEach((image, index) => {
-
-          const slide =
-            document.createElement("div");
-
-          slide.className = "gallery-slide";
-
-          const img =
-            document.createElement("img");
-
-          img.src = image;
-
-          img.alt =
-            product.name +
-            " — фото " +
-            (index + 1);
-
-          img.loading = "lazy";
-
-          img.onerror = function() {
-
-            /*
-              Если фото пока нет,
-              используем первое фото товара.
-            */
-
-            if (this.src !== product.images[0]) {
-              this.src = product.images[0];
-            }
-
-          };
-
-          slide.appendChild(img);
-
-          track.appendChild(slide);
-
-        });
-
-        gallery.appendChild(track);
-
-
-        /* ARROWS */
-
-        const leftButton =
-          document.createElement("button");
-
-        leftButton.className =
-          "gallery-arrow left";
-
-        leftButton.innerHTML = "‹";
-
-        leftButton.setAttribute(
-          "aria-label",
-          "Предыдущее фото"
-        );
-
-        leftButton.onclick = (event) => {
-
-          event.stopPropagation();
-
-          changeGallery(
-            product.id,
-            -1
-          );
-
-        };
-
-
-        const rightButton =
-          document.createElement("button");
-
-        rightButton.className =
-          "gallery-arrow right";
-
-        rightButton.innerHTML = "›";
-
-        rightButton.setAttribute(
-          "aria-label",
-          "Следующее фото"
-        );
-
-        rightButton.onclick = (event) => {
-
-          event.stopPropagation();
-
-          changeGallery(
-            product.id,
-            1
-          );
-
-        };
-
-
-        gallery.appendChild(leftButton);
-        gallery.appendChild(rightButton);
-
-
-        /* DOTS */
-
-        const dots =
-          document.createElement("div");
-
-        dots.className =
-          "gallery-dots";
-
-        product.images.forEach((_, index) => {
-
-          const dot =
-            document.createElement("span");
-
-          dot.className =
-            "gallery-dot";
+      list.forEach(
+        (product) => {
 
           if (
-            index ===
-            galleryIndexes[product.id]
+            galleryIndexes[product.id] === undefined
           ) {
-            dot.classList.add("active");
+
+            galleryIndexes[product.id] = 0;
+
           }
 
-          dots.appendChild(dot);
 
-        });
-
-        gallery.appendChild(dots);
-
-
-        /* SWIPE */
-
-        setupSwipe(
-          gallery,
-          product.id
-        );
+          const card =
+            document.createElement(
+              "article"
+            );
 
 
-        /* INFO */
+          card.className =
+            "product-card";
 
-        const info =
-          document.createElement("div");
 
-        info.className =
-          "product-info";
+          /*
+             ВАЖНО:
 
-        info.innerHTML = `
+             Теперь сама карточка
+             открывает большое окно товара.
 
-          <div class="product-category">
-            ${escapeHtml(product.categoryName)}
-          </div>
+             Но если нажать на:
+             - Добавить
+             - стрелку галереи
 
-          <h3 class="product-name">
-            ${escapeHtml(product.name)}
-          </h3>
+             большое окно не открывается.
+          */
 
-          <div class="product-description">
-            ${escapeHtml(product.description)}
-          </div>
+          card.addEventListener(
+            "click",
+            function(event) {
 
-          <div class="product-bottom">
+              if (
+                event.target.closest(
+                  ".add-button"
+                )
+              ) {
+                return;
+              }
 
-            <div class="product-price">
-              ${formatPrice(product.price)}
+
+              if (
+                event.target.closest(
+                  ".gallery-arrow"
+                )
+              ) {
+                return;
+              }
+
+
+              openProductModal(
+                product.id
+              );
+
+            }
+          );
+
+
+          /* =========================
+             GALLERY
+          ========================== */
+
+          const gallery =
+            document.createElement(
+              "div"
+            );
+
+
+          gallery.className =
+            "product-gallery";
+
+
+          gallery.dataset.productId =
+            product.id;
+
+
+          /* TRACK */
+
+          const track =
+            document.createElement(
+              "div"
+            );
+
+
+          track.className =
+            "gallery-track";
+
+
+          product.images.forEach(
+            (image, index) => {
+
+              const slide =
+                document.createElement(
+                  "div"
+                );
+
+
+              slide.className =
+                "gallery-slide";
+
+
+              const img =
+                document.createElement(
+                  "img"
+                );
+
+
+              img.src =
+                image;
+
+
+              img.alt =
+                product.name +
+                " — фото " +
+                (index + 1);
+
+
+              img.loading =
+                "lazy";
+
+
+              img.onerror =
+                function() {
+
+                  if (
+                    this.src !==
+                    product.images[0]
+                  ) {
+
+                    this.src =
+                      product.images[0];
+
+                  }
+
+                };
+
+
+              slide.appendChild(
+                img
+              );
+
+
+              track.appendChild(
+                slide
+              );
+
+            }
+          );
+
+
+          gallery.appendChild(
+            track
+          );
+
+
+          /* =========================
+             ARROWS
+          ========================== */
+
+          const leftButton =
+            document.createElement(
+              "button"
+            );
+
+
+          leftButton.className =
+            "gallery-arrow left";
+
+
+          leftButton.innerHTML =
+            "‹";
+
+
+          leftButton.setAttribute(
+            "aria-label",
+            "Предыдущее фото"
+          );
+
+
+          leftButton.onclick =
+            (event) => {
+
+              event.stopPropagation();
+
+
+              changeGallery(
+                product.id,
+                -1
+              );
+
+            };
+
+
+          const rightButton =
+            document.createElement(
+              "button"
+            );
+
+
+          rightButton.className =
+            "gallery-arrow right";
+
+
+          rightButton.innerHTML =
+            "›";
+
+
+          rightButton.setAttribute(
+            "aria-label",
+            "Следующее фото"
+          );
+
+
+          rightButton.onclick =
+            (event) => {
+
+              event.stopPropagation();
+
+
+              changeGallery(
+                product.id,
+                1
+              );
+
+            };
+
+
+          gallery.appendChild(
+            leftButton
+          );
+
+
+          gallery.appendChild(
+            rightButton
+          );
+
+
+          /* =========================
+             DOTS
+          ========================== */
+
+          const dots =
+            document.createElement(
+              "div"
+            );
+
+
+          dots.className =
+            "gallery-dots";
+
+
+          product.images.forEach(
+            (_, index) => {
+
+              const dot =
+                document.createElement(
+                  "span"
+                );
+
+
+              dot.className =
+                "gallery-dot";
+
+
+              if (
+                index ===
+                galleryIndexes[product.id]
+              ) {
+
+                dot.classList.add(
+                  "active"
+                );
+
+              }
+
+
+              dots.appendChild(
+                dot
+              );
+
+            }
+          );
+
+
+          gallery.appendChild(
+            dots
+          );
+
+
+          /* =========================
+             SWIPE
+          ========================== */
+
+          setupSwipe(
+            gallery,
+            product.id
+          );
+
+
+          /* =========================
+             INFO
+          ========================== */
+
+          const info =
+            document.createElement(
+              "div"
+            );
+
+
+          info.className =
+            "product-info";
+
+
+          info.innerHTML = `
+
+            <div class="product-category">
+              ${escapeHtml(product.categoryName)}
             </div>
 
-            <button
-              class="add-button"
-              type="button"
-            >
-              Добавить
-            </button>
+            <h3 class="product-name">
+              ${escapeHtml(product.name)}
+            </h3>
 
-          </div>
+            <div class="product-description">
+              ${escapeHtml(product.description)}
+            </div>
 
-        `;
+            <div class="product-bottom">
+
+              <div class="product-price">
+                ${formatPrice(product.price)}
+              </div>
+
+              <button
+                class="add-button"
+                type="button"
+              >
+                Добавить
+              </button>
+
+            </div>
+
+          `;
 
 
-        const addButton =
-          info.querySelector(".add-button");
-
-        addButton.onclick = () => {
-
-          addToCart(product.id);
-
-        };
+          const addButton =
+            info.querySelector(
+              ".add-button"
+            );
 
 
-        card.appendChild(gallery);
+          addButton.onclick =
+            (event) => {
 
-        card.appendChild(info);
+              event.stopPropagation();
 
-        productsGrid.appendChild(card);
+              addToCart(
+                product.id
+              );
 
-      });
+            };
+
+
+          card.appendChild(
+            gallery
+          );
+
+
+          card.appendChild(
+            info
+          );
+
+
+          productsGrid.appendChild(
+            card
+          );
+
+        }
+      );
 
     }
 
@@ -2108,20 +2806,37 @@
        ESCAPE HTML
     ===================================================== */
 
-    function escapeHtml(value) {
+    function escapeHtml(
+      value
+    ) {
 
       return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
 
     }
 
 
     /* =====================================================
-       GALLERY
+       SMALL GALLERY
     ===================================================== */
 
     function changeGallery(
@@ -2131,36 +2846,52 @@
 
       const product =
         products.find(
-          p => p.id === productId
+          p =>
+            p.id === productId
         );
 
+
       if (!product) return;
+
 
       let index =
         galleryIndexes[productId] || 0;
 
+
       index += direction;
 
+
       if (index < 0) {
+
         index =
           product.images.length - 1;
+
       }
+
 
       if (
         index >=
         product.images.length
       ) {
+
         index = 0;
+
       }
 
-      galleryIndexes[productId] = index;
+
+      galleryIndexes[productId] =
+        index;
+
 
       updateGallery(
         productId,
         index
       );
 
-      haptic("light");
+
+      haptic(
+        "light"
+      );
 
     }
 
@@ -2175,12 +2906,15 @@
           `.product-gallery[data-product-id="${productId}"]`
         );
 
+
       if (!gallery) return;
+
 
       const track =
         gallery.querySelector(
           ".gallery-track"
         );
+
 
       track.style.transform =
         `translateX(-${index * 100}%)`;
@@ -2191,20 +2925,23 @@
           ".gallery-dot"
         );
 
-      dots.forEach((dot, i) => {
 
-        dot.classList.toggle(
-          "active",
-          i === index
-        );
+      dots.forEach(
+        (dot, i) => {
 
-      });
+          dot.classList.toggle(
+            "active",
+            i === index
+          );
+
+        }
+      );
 
     }
 
 
     /* =====================================================
-       SWIPE
+       SMALL GALLERY SWIPE
     ===================================================== */
 
     function setupSwipe(
@@ -2213,6 +2950,7 @@
     ) {
 
       let startX = 0;
+
       let startY = 0;
 
       let touching = false;
@@ -2225,8 +2963,14 @@
           const touch =
             event.changedTouches[0];
 
-          startX = touch.clientX;
-          startY = touch.clientY;
+
+          startX =
+            touch.clientX;
+
+
+          startY =
+            touch.clientY;
+
 
           touching = true;
 
@@ -2243,23 +2987,23 @@
 
           if (!touching) return;
 
+
           touching = false;
+
 
           const touch =
             event.changedTouches[0];
 
+
           const deltaX =
-            touch.clientX - startX;
+            touch.clientX -
+            startX;
+
 
           const deltaY =
-            touch.clientY - startY;
+            touch.clientY -
+            startY;
 
-
-          /*
-             Реагируем только если
-             движение преимущественно
-             горизонтальное.
-          */
 
           if (
             Math.abs(deltaX) > 45 &&
@@ -2267,7 +3011,9 @@
               Math.abs(deltaY)
           ) {
 
-            if (deltaX < 0) {
+            if (
+              deltaX < 0
+            ) {
 
               changeGallery(
                 productId,
@@ -2295,65 +3041,575 @@
 
 
     /* =====================================================
+       LARGE PRODUCT MODAL
+    ===================================================== */
+
+    function openProductModal(
+      productId
+    ) {
+
+      const product =
+        products.find(
+          p =>
+            p.id === productId
+        );
+
+
+      if (!product) return;
+
+
+      currentProductModalId =
+        productId;
+
+
+      currentProductModalIndex =
+        galleryIndexes[productId] || 0;
+
+
+      const modal =
+        document.getElementById(
+          "productModal"
+        );
+
+
+      const category =
+        document.getElementById(
+          "productModalCategory"
+        );
+
+
+      const name =
+        document.getElementById(
+          "productModalName"
+        );
+
+
+      const description =
+        document.getElementById(
+          "productModalDescription"
+        );
+
+
+      const price =
+        document.getElementById(
+          "productModalPrice"
+        );
+
+
+      const track =
+        document.getElementById(
+          "productModalTrack"
+        );
+
+
+      const dots =
+        document.getElementById(
+          "productModalDots"
+        );
+
+
+      category.textContent =
+        product.categoryName;
+
+
+      name.textContent =
+        product.name;
+
+
+      description.textContent =
+        product.description;
+
+
+      price.textContent =
+        formatPrice(
+          product.price
+        );
+
+
+      /* =========================
+         IMAGES
+      ========================== */
+
+      track.innerHTML =
+        "";
+
+
+      product.images.forEach(
+        (image, index) => {
+
+          const slide =
+            document.createElement(
+              "div"
+            );
+
+
+          slide.className =
+            "product-modal-slide";
+
+
+          const img =
+            document.createElement(
+              "img"
+            );
+
+
+          img.src =
+            image;
+
+
+          img.alt =
+            product.name +
+            " — фото " +
+            (index + 1);
+
+
+          img.onerror =
+            function() {
+
+              if (
+                this.src !==
+                product.images[0]
+              ) {
+
+                this.src =
+                  product.images[0];
+
+              }
+
+            };
+
+
+          slide.appendChild(
+            img
+          );
+
+
+          track.appendChild(
+            slide
+          );
+
+        }
+      );
+
+
+      /* =========================
+         DOTS
+      ========================== */
+
+      dots.innerHTML =
+        "";
+
+
+      product.images.forEach(
+        (_, index) => {
+
+          const dot =
+            document.createElement(
+              "span"
+            );
+
+
+          dot.className =
+            "product-modal-dot";
+
+
+          if (
+            index ===
+            currentProductModalIndex
+          ) {
+
+            dot.classList.add(
+              "active"
+            );
+
+          }
+
+
+          dots.appendChild(
+            dot
+          );
+
+        }
+      );
+
+
+      updateProductModalGallery();
+
+
+      /* =========================
+         ADD BUTTON
+      ========================== */
+
+      const addButton =
+        document.getElementById(
+          "productModalAdd"
+        );
+
+
+      addButton.onclick =
+        function() {
+
+          addToCart(
+            product.id
+          );
+
+
+          closeProductModal();
+
+        };
+
+
+      modal.classList.add(
+        "show"
+      );
+
+
+      document.body.style.overflow =
+        "hidden";
+
+
+      haptic(
+        "light"
+      );
+
+    }
+
+
+    function closeProductModal() {
+
+      const modal =
+        document.getElementById(
+          "productModal"
+        );
+
+
+      modal.classList.remove(
+        "show"
+      );
+
+
+      currentProductModalId =
+        null;
+
+
+      document.body.style.overflow =
+        "";
+
+    }
+
+
+    function outsideProductModal(
+      event
+    ) {
+
+      if (
+        event.target.id ===
+        "productModal"
+      ) {
+
+        closeProductModal();
+
+      }
+
+    }
+
+
+    function changeProductModalGallery(
+      direction
+    ) {
+
+      if (
+        !currentProductModalId
+      ) {
+        return;
+      }
+
+
+      const product =
+        products.find(
+          p =>
+            p.id ===
+            currentProductModalId
+        );
+
+
+      if (!product) return;
+
+
+      currentProductModalIndex +=
+        direction;
+
+
+      if (
+        currentProductModalIndex < 0
+      ) {
+
+        currentProductModalIndex =
+          product.images.length - 1;
+
+      }
+
+
+      if (
+        currentProductModalIndex >=
+        product.images.length
+      ) {
+
+        currentProductModalIndex =
+          0;
+
+      }
+
+
+      updateProductModalGallery();
+
+
+      haptic(
+        "light"
+      );
+
+    }
+
+
+    function updateProductModalGallery() {
+
+      const track =
+        document.getElementById(
+          "productModalTrack"
+        );
+
+
+      const dots =
+        document.querySelectorAll(
+          ".product-modal-dot"
+        );
+
+
+      if (!track) return;
+
+
+      track.style.transform =
+        `translateX(-${currentProductModalIndex * 100}%)`;
+
+
+      dots.forEach(
+        (dot, index) => {
+
+          dot.classList.toggle(
+            "active",
+            index ===
+              currentProductModalIndex
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       LARGE PRODUCT MODAL SWIPE
+    ===================================================== */
+
+    (function setupProductModalSwipe() {
+
+      const gallery =
+        document.getElementById(
+          "productModalGallery"
+        );
+
+
+      if (!gallery) return;
+
+
+      let startX = 0;
+
+      let startY = 0;
+
+      let touching = false;
+
+
+      gallery.addEventListener(
+        "touchstart",
+        event => {
+
+          const touch =
+            event.changedTouches[0];
+
+
+          startX =
+            touch.clientX;
+
+
+          startY =
+            touch.clientY;
+
+
+          touching = true;
+
+        },
+        {
+          passive: true
+        }
+      );
+
+
+      gallery.addEventListener(
+        "touchend",
+        event => {
+
+          if (!touching) return;
+
+
+          touching = false;
+
+
+          const touch =
+            event.changedTouches[0];
+
+
+          const deltaX =
+            touch.clientX -
+            startX;
+
+
+          const deltaY =
+            touch.clientY -
+            startY;
+
+
+          if (
+            Math.abs(deltaX) > 45 &&
+            Math.abs(deltaX) >
+              Math.abs(deltaY)
+          ) {
+
+            if (
+              deltaX < 0
+            ) {
+
+              changeProductModalGallery(
+                1
+              );
+
+            } else {
+
+              changeProductModalGallery(
+                -1
+              );
+
+            }
+
+          }
+
+        },
+        {
+          passive: true
+        }
+      );
+
+    })();
+
+
+    /* =====================================================
        CATEGORY
     ===================================================== */
 
-    function showCategory(category) {
+    function showCategory(
+      category
+    ) {
 
-      currentCategory = category;
+      currentCategory =
+        category;
 
-      let title = "Все украшения";
 
-      if (category === "berry") {
-        title = "Ягодная";
+      let title =
+        "Все украшения";
+
+
+      if (
+        category ===
+        "berry"
+      ) {
+
+        title =
+          "Ягодная";
+
       }
 
-      if (category === "leopard") {
-        title = "Леопард";
+
+      if (
+        category ===
+        "leopard"
+      ) {
+
+        title =
+          "Леопард";
+
       }
 
-      if (category === "amulets") {
-        title = "Обереги";
+
+      if (
+        category ===
+        "amulets"
+      ) {
+
+        title =
+          "Обереги";
+
       }
 
-      catalogTitle.textContent = title;
+
+      catalogTitle.textContent =
+        title;
 
 
       const filtered =
         products.filter(
           product =>
-            product.category === category
+            product.category ===
+            category
         );
 
 
-      renderProducts(filtered);
+      renderProducts(
+        filtered
+      );
 
 
-      setTimeout(() => {
+      setTimeout(
+        () => {
 
-        const catalog =
-          document.querySelector(
-            ".catalog"
-          );
-
-        if (catalog) {
-
-          const top =
-            catalog.getBoundingClientRect().top +
-            window.scrollY -
-            20;
-
-          window.scrollTo({
-            top,
-            behavior: "smooth"
-          });
-
-        }
-
-      }, 50);
+          const catalog =
+            document.querySelector(
+              ".catalog"
+            );
 
 
-      haptic("light");
+          if (catalog) {
+
+            const top =
+              catalog.getBoundingClientRect().top +
+              window.scrollY -
+              20;
+
+
+            window.scrollTo({
+              top,
+              behavior:
+                "smooth"
+            });
+
+          }
+
+        },
+        50
+      );
+
+
+      haptic(
+        "light"
+      );
 
     }
 
@@ -2364,12 +3620,17 @@
 
     function showAllProducts() {
 
-      currentCategory = "all";
+      currentCategory =
+        "all";
+
 
       catalogTitle.textContent =
         "Все украшения";
 
-      renderProducts(products);
+
+      renderProducts(
+        products
+      );
 
     }
 
@@ -2378,12 +3639,17 @@
        CART
     ===================================================== */
 
-    function addToCart(productId) {
+    function addToCart(
+      productId
+    ) {
 
       const product =
         products.find(
-          p => p.id === productId
+          p =>
+            p.id ===
+            productId
         );
+
 
       if (!product) return;
 
@@ -2391,19 +3657,24 @@
       const existing =
         cart.find(
           item =>
-            item.productId === productId
+            item.productId ===
+            productId
         );
 
 
       if (existing) {
 
-        existing.quantity += 1;
+        existing.quantity +=
+          1;
 
       } else {
 
         cart.push({
-          productId: productId,
-          quantity: 1
+          productId:
+            productId,
+
+          quantity:
+            1
         });
 
       }
@@ -2411,7 +3682,11 @@
 
       updateCart();
 
-      haptic("medium");
+
+      haptic(
+        "medium"
+      );
+
 
       showToast(
         `${product.name} добавлен в корзину`
@@ -2428,21 +3703,27 @@
       const item =
         cart.find(
           item =>
-            item.productId === productId
+            item.productId ===
+            productId
         );
+
 
       if (!item) return;
 
 
-      item.quantity += amount;
+      item.quantity +=
+        amount;
 
 
-      if (item.quantity <= 0) {
+      if (
+        item.quantity <= 0
+      ) {
 
         cart =
           cart.filter(
             item =>
-              item.productId !== productId
+              item.productId !==
+              productId
           );
 
       }
@@ -2452,17 +3733,22 @@
 
       renderCart();
 
-      haptic("light");
+      haptic(
+        "light"
+      );
 
     }
 
 
-    function removeFromCart(productId) {
+    function removeFromCart(
+      productId
+    ) {
 
       cart =
         cart.filter(
           item =>
-            item.productId !== productId
+            item.productId !==
+            productId
         );
 
 
@@ -2470,7 +3756,9 @@
 
       renderCart();
 
-      haptic("light");
+      haptic(
+        "light"
+      );
 
     }
 
@@ -2478,8 +3766,12 @@
     function getCartCount() {
 
       return cart.reduce(
-        (total, item) =>
-          total + item.quantity,
+        (
+          total,
+          item
+        ) =>
+          total +
+          item.quantity,
         0
       );
 
@@ -2489,15 +3781,23 @@
     function getCartTotal() {
 
       return cart.reduce(
-        (total, item) => {
+        (
+          total,
+          item
+        ) => {
 
           const product =
             products.find(
               p =>
-                p.id === item.productId
+                p.id ===
+                item.productId
             );
 
-          if (!product) return total;
+
+          if (!product) {
+            return total;
+          }
+
 
           return (
             total +
@@ -2517,6 +3817,7 @@
       const count =
         getCartCount();
 
+
       const total =
         getCartTotal();
 
@@ -2524,8 +3825,11 @@
       cartCount.textContent =
         count;
 
+
       cartTotal.textContent =
-        formatPrice(total);
+        formatPrice(
+          total
+        );
 
 
       if (count > 0) {
@@ -2551,10 +3855,13 @@
 
     function renderCart() {
 
-      cartItems.innerHTML = "";
+      cartItems.innerHTML =
+        "";
 
 
-      if (cart.length === 0) {
+      if (
+        cart.length === 0
+      ) {
 
         cartItems.innerHTML = `
 
@@ -2570,89 +3877,102 @@
 
         `;
 
+
         return;
 
       }
 
 
-      cart.forEach(item => {
+      cart.forEach(
+        item => {
 
-        const product =
-          products.find(
-            p =>
-              p.id === item.productId
+          const product =
+            products.find(
+              p =>
+                p.id ===
+                item.productId
+            );
+
+
+          if (!product) {
+            return;
+          }
+
+
+          const row =
+            document.createElement(
+              "div"
+            );
+
+
+          row.className =
+            "cart-item";
+
+
+          row.innerHTML = `
+
+            <img
+              class="cart-item-image"
+              src="${product.images[0]}"
+              alt="${escapeHtml(product.name)}"
+            >
+
+            <div class="cart-item-main">
+
+              <div class="cart-item-name">
+                ${escapeHtml(product.name)}
+              </div>
+
+              <div class="cart-item-price">
+                ${formatPrice(product.price)}
+              </div>
+
+              <div class="quantity-control">
+
+                <button
+                  class="quantity-button"
+                  onclick="changeQuantity('${product.id}', -1)"
+                >
+                  −
+                </button>
+
+                <span class="quantity-number">
+                  ${item.quantity}
+                </span>
+
+                <button
+                  class="quantity-button"
+                  onclick="changeQuantity('${product.id}', 1)"
+                >
+                  +
+                </button>
+
+              </div>
+
+            </div>
+
+            <button
+              class="remove-item"
+              onclick="removeFromCart('${product.id}')"
+              aria-label="Удалить"
+            >
+              ×
+            </button>
+
+          `;
+
+
+          cartItems.appendChild(
+            row
           );
 
-        if (!product) return;
-
-
-        const row =
-          document.createElement("div");
-
-        row.className =
-          "cart-item";
-
-
-        row.innerHTML = `
-
-          <img
-            class="cart-item-image"
-            src="${product.images[0]}"
-            alt="${escapeHtml(product.name)}"
-          >
-
-          <div class="cart-item-main">
-
-            <div class="cart-item-name">
-              ${escapeHtml(product.name)}
-            </div>
-
-            <div class="cart-item-price">
-              ${formatPrice(product.price)}
-            </div>
-
-            <div class="quantity-control">
-
-              <button
-                class="quantity-button"
-                onclick="changeQuantity('${product.id}', -1)"
-              >
-                −
-              </button>
-
-              <span class="quantity-number">
-                ${item.quantity}
-              </span>
-
-              <button
-                class="quantity-button"
-                onclick="changeQuantity('${product.id}', 1)"
-              >
-                +
-              </button>
-
-            </div>
-
-          </div>
-
-          <button
-            class="remove-item"
-            onclick="removeFromCart('${product.id}')"
-            aria-label="Удалить"
-          >
-            ×
-          </button>
-
-        `;
-
-
-        cartItems.appendChild(row);
-
-      });
+        }
+      );
 
 
       const total =
         getCartTotal();
+
 
       const count =
         getCartCount();
@@ -2661,22 +3981,31 @@
       document.getElementById(
         "summaryItems"
       ).textContent =
-        formatPrice(total);
+        formatPrice(
+          total
+        );
+
 
       document.getElementById(
         "summaryCount"
       ).textContent =
         count;
 
+
       document.getElementById(
         "summaryTotal"
       ).textContent =
-        formatPrice(total);
+        formatPrice(
+          total
+        );
+
 
       document.getElementById(
         "checkoutTotal"
       ).textContent =
-        formatPrice(total);
+        formatPrice(
+          total
+        );
 
     }
 
@@ -2689,36 +4018,56 @@
 
       renderCart();
 
+
       document
-        .getElementById("cartModal")
-        .classList.add("show");
+        .getElementById(
+          "cartModal"
+        )
+        .classList.add(
+          "show"
+        );
+
 
       document.body.style.overflow =
         "hidden";
 
-      haptic("light");
+
+      haptic(
+        "light"
+      );
 
     }
 
 
     function openCheckout() {
 
-      if (cart.length === 0) {
+      if (
+        cart.length === 0
+      ) {
 
         showToast(
           "Сначала добавьте товары в корзину"
         );
+
 
         return;
 
       }
 
 
-      closeModal("cartModal");
+      closeModal(
+        "cartModal"
+      );
+
 
       document
-        .getElementById("checkoutModal")
-        .classList.add("show");
+        .getElementById(
+          "checkoutModal"
+        )
+        .classList.add(
+          "show"
+        );
+
 
       document.body.style.overflow =
         "hidden";
@@ -2734,11 +4083,18 @@
     }
 
 
-    function closeModal(id) {
+    function closeModal(
+      id
+    ) {
 
       document
-        .getElementById(id)
-        .classList.remove("show");
+        .getElementById(
+          id
+        )
+        .classList.remove(
+          "show"
+        );
+
 
       document.body.style.overflow =
         "";
@@ -2752,10 +4108,13 @@
     ) {
 
       if (
-        event.target.id === modalId
+        event.target.id ===
+        modalId
       ) {
 
-        closeModal(modalId);
+        closeModal(
+          modalId
+        );
 
       }
 
@@ -2766,16 +4125,21 @@
        SUBMIT ORDER
     ===================================================== */
 
-    async function submitOrder(event) {
+    async function submitOrder(
+      event
+    ) {
 
       event.preventDefault();
 
 
-      if (cart.length === 0) {
+      if (
+        cart.length === 0
+      ) {
 
         showToast(
           "Корзина пустая"
         );
+
 
         return;
 
@@ -2784,30 +4148,40 @@
 
       const name =
         document
-          .getElementById("customerName")
+          .getElementById(
+            "customerName"
+          )
           .value
           .trim();
 
 
       const contact =
         document
-          .getElementById("customerContact")
+          .getElementById(
+            "customerContact"
+          )
           .value
           .trim();
 
 
       const comment =
         document
-          .getElementById("customerComment")
+          .getElementById(
+            "customerComment"
+          )
           .value
           .trim();
 
 
-      if (!name || !contact) {
+      if (
+        !name ||
+        !contact
+      ) {
 
         showToast(
           "Заполните имя и контакт"
         );
+
 
         return;
 
@@ -2820,38 +4194,48 @@
         );
 
 
-      submitButton.disabled = true;
+      submitButton.disabled =
+        true;
+
 
       submitButton.textContent =
         "Отправляем...";
 
 
       const orderItems =
-        cart.map(item => {
+        cart.map(
+          item => {
 
-          const product =
-            products.find(
-              p =>
-                p.id === item.productId
-            );
+            const product =
+              products.find(
+                p =>
+                  p.id ===
+                  item.productId
+              );
 
-          return {
 
-            id: product.id,
+            return {
 
-            name: product.name,
+              id:
+                product.id,
 
-            price: product.price,
+              name:
+                product.name,
 
-            quantity: item.quantity,
+              price:
+                product.price,
 
-            total:
-              product.price *
-              item.quantity
+              quantity:
+                item.quantity,
 
-          };
+              total:
+                product.price *
+                item.quantity
 
-        });
+            };
+
+          }
+        );
 
 
       const total =
@@ -2868,22 +4252,36 @@
 
       const orderNumber =
         "FL-" +
-        String(Math.floor(1000 + Math.random() * 9000));
+        String(
+          Math.floor(
+            1000 +
+            Math.random() *
+            9000
+          )
+        );
+
 
       const payload = {
-        order_number: orderNumber,
 
-        name: name,
+        order_number:
+          orderNumber,
 
-        contact: contact,
+        name:
+          name,
 
-        comment: comment,
+        contact:
+          contact,
 
-        total: total,
+        comment:
+          comment,
 
-        items: JSON.stringify(
-          orderItems
-        ),
+        total:
+          total,
+
+        items:
+          JSON.stringify(
+            orderItems
+          ),
 
         telegram_id:
           telegramUser
@@ -2911,25 +4309,22 @@
 
       try {
 
-        /*
-          Используем GET с параметрами,
-          чтобы максимально просто
-          работать с Google Apps Script.
-        */
-
         const params =
           new URLSearchParams();
 
 
-        Object.entries(payload)
-          .forEach(([key, value]) => {
+        Object.entries(
+          payload
+        ).forEach(
+          ([key, value]) => {
 
             params.append(
               key,
               value
             );
 
-          });
+          }
+        );
 
 
         const response =
@@ -2938,27 +4333,26 @@
             "?" +
             params.toString(),
             {
-              method: "GET",
-              mode: "cors"
+              method:
+                "GET",
+
+              mode:
+                "cors"
             }
           );
 
 
-        /*
-          Даже если Apps Script
-          возвращает необычный response,
-          считаем запрос отправленным,
-          если fetch не выбросил ошибку.
-        */
-
         if (!response) {
+
           throw new Error(
             "No response"
           );
+
         }
 
 
         cart = [];
+
 
         updateCart();
 
@@ -2974,20 +4368,36 @@
           "checkoutModal"
         );
 
-        document
-          .getElementById("orderNumber")
-          .textContent = orderNumber;
 
         document
-          .getElementById("orderSuccessModal")
-          .classList.add("show");
+          .getElementById(
+            "orderNumber"
+          )
+          .textContent =
+          orderNumber;
 
-        document.body.style.overflow = "hidden";
 
-        haptic("success");
+        document
+          .getElementById(
+            "orderSuccessModal"
+          )
+          .classList.add(
+            "show"
+          );
 
 
-      } catch (error) {
+        document.body.style.overflow =
+          "hidden";
+
+
+        haptic(
+          "success"
+        );
+
+
+      } catch (
+        error
+      ) {
 
         console.error(
           "Ошибка отправки заказа:",
@@ -3005,6 +4415,7 @@
         submitButton.disabled =
           false;
 
+
         submitButton.textContent =
           "Отправить заказ";
 
@@ -3015,19 +4426,26 @@
 
     function returnToStore() {
 
-      closeModal("orderSuccessModal");
-      document.body.style.overflow = "";
+      closeModal(
+        "orderSuccessModal"
+      );
+
+
+      document.body.style.overflow =
+        "";
+
 
       window.scrollTo({
         top: 0,
-        behavior: "smooth"
+        behavior:
+          "smooth"
       });
 
     }
 
 
     /* =====================================================
-       ESCAPE / BACK BUTTON
+       ESCAPE
     ===================================================== */
 
     document.addEventListener(
@@ -3035,14 +4453,23 @@
       event => {
 
         if (
-          event.key === "Escape"
+          event.key ===
+          "Escape"
         ) {
 
-          closeModal("cartModal");
+          closeProductModal();
 
-          closeModal("checkoutModal");
+          closeModal(
+            "cartModal"
+          );
 
-          closeModal("orderSuccessModal");
+          closeModal(
+            "checkoutModal"
+          );
+
+          closeModal(
+            "orderSuccessModal"
+          );
 
         }
 
@@ -3058,15 +4485,10 @@
 
     updateCart();
 
-
   </script>
-
-
 
 </body>
 </html>
-
-
 
 
 
